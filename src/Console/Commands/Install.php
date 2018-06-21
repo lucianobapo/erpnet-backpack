@@ -164,4 +164,5 @@ class Install extends Command
             $this->{$type}($content);
         }
     }
+
 }
