@@ -26,9 +26,9 @@ class ErpnetBackpackServiceProvider extends ServiceProvider
 //        $this->mergeConfigFrom($configPath, 'erpnetModels');
 
         //Publish Config
-        $this->publishes([
-            $projectRootDir.'permissions.sh' => base_path('permissions.sh')
-        ], 'erpnetPermissions');
+//        $this->publishes([
+//            $projectRootDir.'permissions.sh' => base_path('permissions.sh')
+//        ], 'erpnetPermissions');
 
         //Bind Interfaces
 //        $app->bind($bindInterface, $bindRepository);

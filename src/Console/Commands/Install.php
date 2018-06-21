@@ -15,7 +15,7 @@ class Install extends Command
      *
      * @var string
      */
-    protected $signature = 'erpnet:permissions:install
+    protected $signature = 'erpnet:backpack:install
                                 {--timeout=300} : How many seconds to allow each process to run.
                                 {--debug} : Show process output or not. Useful for debugging.';
 
@@ -45,22 +45,80 @@ class Install extends Command
     {
         //
         //$this->info(" Backpack\Base installation started. Please wait...");
-        $this->progressBar = $this->output->createProgressBar(4);
+        $this->progressBar = $this->output->createProgressBar(14);
         $this->progressBar->start();
-        $this->info(" ErpNET\Backpack installation started. Please wait...");
+        $this->info(" ErpNET\\Backpack installation started. Please wait...");
         $this->progressBar->advance();
 
-        $this->line(' Publishing files');
-        $this->executeProcess('php artisan vendor:publish --force  --provider="ErpNET\Permissions\Providers\ErpnetPermissionsServiceProvider" --tag=erpnetPermissions');
+        //step 1
+        $this->line(' Installing Backpack\\Base');
+        $this->executeProcess('php artisan backpack:base:install');
 
-        $this->line(' Configuring files');
-        $this->executeProcess('chmod +x permissions.sh');
+        //step 2
+        $this->line(' Installing Backpack\\Crud');
+        $this->executeProcess('php artisan backpack:crud:install');
 
-        $this->line(' Start files');
-        $this->executeProcess('./permissions.sh');
+        //step 3
+        $this->line(' Installing Backpack\\Settings');
+        $this->line(' Publishing Files...');
+        $this->executeProcess('php artisan vendor:publish --provider="Backpack\Settings\SettingsServiceProvider"');
+        //step 4
+        $this->line(' Migrate DB...');
+        $this->executeProcess('php artisan migrate');
+        //step 5
+        $this->line(' Db seed...');
+        $this->executeProcess('php artisan db:seed --class="Backpack\Settings\database\seeds\SettingsTableSeeder"');
+        //step 6
+        $this->line(' Add menu...');
+        $this->executeProcess('php artisan backpack:base:add-sidebar-content "<li><a href=\'{{ url(config(\'backpack.base.route_prefix\', \'admin\') . \'/setting\') }}\'><i class=\'fa fa-cog\'></i> <span>Settings</span></a></li>"');
 
+
+
+        //step 7
+        $this->line(' Installing Backpack\\PageManager');
+        $this->line(' Publishing Files...');
+        $this->executeProcess('php artisan vendor:publish --provider="Backpack\PageManager\PageManagerServiceProvider"');
+        //step 8
+        $this->line(' Migrate DB...');
+        $this->executeProcess('php artisan migrate');
+        //step 9
+        $this->line(' Add menu...');
+        $this->executeProcess('<li><a href="{{backpack_url(\'page\') }}"><i class="fa fa-file-o"></i> <span>Pages</span></a></li>');
+
+
+
+        //step 10
+        $this->line(' Installing Backpack\\PermissionManager');
+        $this->line(' Publishing Files...');
+        $this->executeProcess('php artisan vendor:publish --provider="Backpack\PermissionManager\PermissionManagerServiceProvider"');
+        //step 11
+        $this->line(' Migrate DB...');
+        $this->executeProcess('php artisan migrate');
+
+        //step 12
+        $this->line(' Add menu...');
+        $this->executeProcess('
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-group"></i> <span>Users, Roles, Permissions</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="{{ backpack_url(\'user\') }}"><i class="fa fa-user"></i> <span>Users</span></a></li>
+                    <li><a href="{{ backpack_url(\'role\') }}"><i class="fa fa-group"></i> <span>Roles</span></a></li>
+                    <li><a href="{{ backpack_url(\'permission\') }}"><i class="fa fa-key"></i> <span>Permissions</span></a></li>
+                </ul>
+            </li>
+        ');
+
+
+
+        //step 13
+        $this->line(' Installing ErpNET\\Permissions');
+        $this->executeProcess('php artisan erpnet:permissions:install');
+
+        //step 14
         $this->progressBar->finish();
-        $this->info(" ErpNET\Backpack installation finished.");
+        $this->info(" ErpNET\\Backpack installation finished.");
     }
 
     /**

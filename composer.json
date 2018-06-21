@@ -12,7 +12,12 @@
     "php": "^7.1.3",
     "illuminate/console": "^5.6",
     "symfony/process": "^4.1",
-    "ilhanet/erpnet-permissions": "dev-master"
+    "ilhanet/erpnet-permissions": "dev-master",
+    "backpack/base": "^0.9.6",
+    "backpack/crud": "^3.4",
+    "backpack/settings": "^2.1",
+    "backpack/pagemanager": "^1.1",
+    "backpack/permissionmanager": "^3.12"
   },
   "require-dev": {
   },
