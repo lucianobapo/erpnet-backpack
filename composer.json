@@ -1,0 +1,36 @@
+{
+  "name": "ilhanet/erpnet-backpack",
+  "license": "MIT",
+  "version": "0.0.1",
+  "authors": [
+    {
+      "name": "Luciano Porto",
+      "email": "luciano.bapo@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.1.3",
+    "illuminate/console": "^5.6",
+    "symfony/process": "^4.1",
+    "ilhanet/erpnet-permissions": "dev-master"
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-4": {
+      "ErpNET\\Backpack\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "ErpNET\\BackpackTests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "ErpNET\\Backpack\\Providers\\ErpnetBackpackServiceProvider"
+      ]
+    }
+  }
+}
