@@ -83,7 +83,7 @@ class Install extends Command
         $this->executeProcess('php artisan migrate');
         //step 9
         $this->line(' Add menu...');
-        $this->executeProcess('<li><a href="{{backpack_url(\'page\') }}"><i class="fa fa-file-o"></i> <span>Pages</span></a></li>');
+        $this->executeProcess('php artisan backpack:base:add-sidebar-content "<li><a href=\'{{backpack_url(\'page\') }}\'><i class=\'fa fa-file-o\'></i> <span>Pages</span></a></li>"');
 
 
 
@@ -97,18 +97,7 @@ class Install extends Command
 
         //step 12
         $this->line(' Add menu...');
-        $this->executeProcess('
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-group"></i> <span>Users, Roles, Permissions</span> <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="{{ backpack_url(\'user\') }}"><i class="fa fa-user"></i> <span>Users</span></a></li>
-                    <li><a href="{{ backpack_url(\'role\') }}"><i class="fa fa-group"></i> <span>Roles</span></a></li>
-                    <li><a href="{{ backpack_url(\'permission\') }}"><i class="fa fa-key"></i> <span>Permissions</span></a></li>
-                </ul>
-            </li>
-        ');
+        $this->executeProcess('php artisan backpack:base:add-sidebar-content "<li class=treeview><a href=#><i class=\'fa fa-group\'></i> <span>Users, Roles, Permissions</span> <i class=\'fa fa-angle-left pull-right\'></i></a><ul class=treeview-menu><li><a href=\'{{ backpack_url(\'user\') }}\'><i class=\'fa fa-user\'></i> <span>Users</span></a></li><li><a href=\'{{ backpack_url(\'role\') }}\'><i class=\'fa fa-group\'></i> <span>Roles</span></a></li><li><a href=\'{{ backpack_url(\'permission\') }}\'><i class=\'fa fa-key\'></i> <span>Permissions</span></a></li></ul></li>"');
 
 
 
@@ -145,6 +134,7 @@ class Install extends Command
 
         // executes after the command finishes
         if (!$process->isSuccessful()) {
+            $this->executeProcess('php artisan migrate:reset');
             throw new ProcessFailedException($process);
         }
 
