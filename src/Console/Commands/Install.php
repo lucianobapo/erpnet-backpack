@@ -52,11 +52,11 @@ class Install extends Command
 
         //step 1
         $this->line(' Installing Backpack\\Base');
-        $this->executeProcess('php artisan backpack:base:install'+$this->option('debug')?' --debug':'');
+        $this->executeProcess('php artisan backpack:base:install'.($this->option('debug')?' --debug':''));
 
         //step 2
         $this->line(' Installing Backpack\\Crud');
-        $this->executeProcess('php artisan backpack:crud:install'+$this->option('debug')?' --debug':'');
+        $this->executeProcess('php artisan backpack:crud:install'.($this->option('debug')?' --debug':''));
 
         //step 3
         $this->line(' Installing Backpack\\Settings');
